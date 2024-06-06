@@ -1,8 +1,5 @@
-FROM python:3.12.3-alpine as builder
+FROM python:3.12.2-slim as builder
 
-RUN apk update \
-  && apk add --no-cache \
-    gcc
 #Setup working directory inside dockcer
 WORKDIR /app
 
@@ -14,7 +11,9 @@ ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
 
-#RUN apt-get update && apt-get install -y --no-install-recommends gcc curl
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends gcc curl
+
 RUN python3 -m venv venv
 ENV VIRTUAL_ENV=/app/venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
@@ -24,16 +23,15 @@ RUN pip install -r requirements.txt
 
 
 # final stage
-FROM python:3.12.3-alpine as runner
-#RUN sed -i 's/https/http/' /etc/apk/repositories
-RUN apk update && apk add curl
-
+FROM python:3.12.2-slim as runner
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl
 WORKDIR /app
 
 #Use Unprivileged Containers - Security step
 #remove shell access and ensure there's no home directory as well
-#RUN addgroup --gid 1001 --system app && adduser --no-create-home --shell /bin/false --disabled-password --uid 1001 --system -G app
-RUN addgroup -g 1001 -S app && adduser -H -s /bin/false -D -u 1001 -G app -S app
+RUN addgroup --gid 1001 --system app && \
+    adduser --no-create-home --shell /bin/false --disabled-password --uid 1001 --system --group app
 
 USER app
 
