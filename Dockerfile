@@ -12,7 +12,7 @@ ENV PYTHONUNBUFFERED 1
 
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gcc
+    apt-get install -y --no-install-recommends gcc curl
 
 RUN python3 -m venv venv
 ENV VIRTUAL_ENV=/app/venv
@@ -24,7 +24,8 @@ RUN pip install -r requirements.txt
 
 # final stage
 FROM python:3.12.2-slim as runner
-
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl
 WORKDIR /app
 
 #Use Unprivileged Containers - Security step
@@ -43,7 +44,8 @@ ENV FLASK_APP=app/app.py
 
 EXPOSE 8002
 
+HEALTHCHECK CMD curl --fail http://localhost:8002/health || exit 1
 CMD ["gunicorn", "--bind" , ":8002", "--workers", "2", "app:app"]
 
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl -f http://localhost:8002/health
+#HEALTHCHECK CMD curl --fail http://localhost:8080/health || exit 1
 
