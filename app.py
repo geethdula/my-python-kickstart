@@ -3,7 +3,7 @@ app = Flask(__name__)
  
 @app.route('/')
 def hello_world():
-    return 'Hello from Mypythonapp V1'
+    return 'Hello from Mypythonapp V2'
 
 @app.route('/health', methods=['GET'])
 def health():
