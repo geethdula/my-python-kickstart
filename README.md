@@ -63,6 +63,37 @@ PATH: This is a standard environment variable on Unix-like systems that specifie
 "$VIRTUAL_ENV/bin:$PATH": This sets the PATH variable to include the bin directory of the virtual environment at the beginning. The $VIRTUAL_ENV/bin directory contains the Python executable and other scripts installed in the virtual environment. By placing it at the beginning, it ensures that these versions take precedence over any system-wide versions.
 
 
+4. HEALTHCHECK:
+
+> This is the Dockerfile instruction used to specify the health check configuration for a container.
+It tells Docker to monitor the health of the container using the provided command.
+CMD:
+
+> This specifies the command to be executed for the health check.
+5. CMD is the instruction that follows HEALTHCHECK and defines the actual health check command.
+
+6. curl:
+
+> curl is a command-line tool used to transfer data to or from a server.
+In this context, it is used to send an HTTP request to a specific URL to check the health of the application.
+
+7. --fail:
+
+> This is an option for curl.
+It instructs curl to return an error exit code if the HTTP response code is 400 or higher.
+This ensures that the health check will fail if the application returns an HTTP error status code.
+
+8. http://localhost:8002/health:
+
+> This is the URL that curl is checking.
+It is assumed that the application running inside the container exposes a health endpoint at http://localhost:8002/health.
+This endpoint should return an HTTP 200 status code if the application is healthy.
+
+9. || exit 1:
+
+> This is a conditional statement in shell scripting.
+|| means "or", so if the command before it (curl --fail http://localhost:8002/health) fails (returns a non-zero exit code), then the command after it (exit 1) will be executed.
+exit 1 ensures that the health check returns a non-zero exit code if the curl command fails, signaling to Docker that the container is unhealthy.
 
 #Followed Articles
 
