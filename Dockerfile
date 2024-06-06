@@ -45,5 +45,5 @@ EXPOSE 8002
 
 CMD ["gunicorn", "--bind" , ":8002", "--workers", "2", "app:app"]
 
-HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl -f http://localhost:8002
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl -f http://localhost:8002/health
 
