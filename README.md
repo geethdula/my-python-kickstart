@@ -10,7 +10,7 @@
 
 2. Use volumes
 
-docker run -d --name pythonapp --mount source=pythonapp,target=/app -p 8002:8002 geethdula1/python-test:latest
+ocker run -d --name pythonapp --mount source=pythonapp,target=/app -p 8002:8002 geethdula1/python-test:latest
    
 OR
 
