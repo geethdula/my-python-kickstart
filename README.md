@@ -95,6 +95,17 @@ This endpoint should return an HTTP 200 status code if the application is health
 || means "or", so if the command before it (curl --fail http://localhost:8002/health) fails (returns a non-zero exit code), then the command after it (exit 1) will be executed.
 exit 1 ensures that the health check returns a non-zero exit code if the curl command fails, signaling to Docker that the container is unhealthy.
 
+10. Gunicorn Command Breakdown:
+
+> "gunicorn": This starts the Gunicorn server.
+
+> "--bind", ":8002": This tells Gunicorn to bind to all available IP addresses on the host (denoted by :) and to use port 8002. This means the Gunicorn server will listen for incoming HTTP requests on port 8002.
+
+> "--workers", "2": This specifies that Gunicorn should use 2 worker processes to handle requests. Each worker can handle one request at a time, so more workers can help handle more concurrent requests.
+
+> "app:app": This part specifies the WSGI application that Gunicorn will serve. The format is MODULE_NAME:VARIABLE_NAME, where MODULE_NAME is the Python file (without the .py extension) and VARIABLE_NAME is the WSGI application callable (usually a Flask or Django application instance). Here, it means there is a Python file named app.py with a WSGI application instance named app.
+
+
 #Followed Articles
 
 1. https://testdriven.io/blog/docker-best-practices/#use-multi-stage-builds
